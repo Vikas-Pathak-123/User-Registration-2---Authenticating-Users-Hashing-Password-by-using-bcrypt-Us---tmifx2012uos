@@ -23,6 +23,22 @@ Post request json file structure
 const registerUser =async (req, res) => {
 
     //write your code here
+    try {
+        const { name, email, password,DOB} = req.body;
+        const user = new users({ name, email, password,DOB });
+        await user.save();
+        res.status(200).send(user._id);
+      } catch (error) {
+        if (error.name === "MongoError" && error.code === 11000) {
+          res
+            .status(404)
+            .send("User validation failed: email: Email already exists");
+        } else {
+          res
+            .status(404)
+            .send("User validation failed: email: Email already exists");
+        }
+      }
 
 }
 
